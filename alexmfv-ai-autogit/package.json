@@ -10,14 +10,37 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:alexmfv-ai-autogit.helloWorld"
+    "onStartupFinished"
   ],
   "main": "./extension.js",
   "contributes": {
     "commands": [{
-      "command": "alexmfv-ai-autogit.helloWorld",
-      "title": "Hello World"
-    }]
+      "command": "alexmfv-ai-autogit.openContextMenu",
+      "title": "Open AutoGit"
+    }],
+
+    "configuration":[
+      {
+        "title": "AutoGit Configurations",
+        "properties": {
+          "alexmfv-ai-autogit.autoCommit": {
+            "type": "boolean",
+            "default": false,
+            "description": "Allow AutoGit to automatically commit and push your changes."
+          },
+          "alexmfv-ai-autogit.autoCodeIssue": {
+            "type": "boolean",
+            "default": false,
+            "description": "AutoGit will automatically analize your changes and create issues it finds, it will then post those issues to the github repository \"Issues\" tab."
+          },
+          "alexmfv-ai-autogit.token": {
+            "type": "string",
+            "default": "Your-OpenAI-Token-Here",
+            "description": "Your OpenAI token key, this is required for the extension to work, so make sure you have one."
+          }
+        }
+      }
+    ]
   },
   "scripts": {
     "lint": "eslint .",

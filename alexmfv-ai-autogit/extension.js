@@ -14,14 +14,16 @@ function activate(context) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "alexmfv-ai-autogit" is now active!');
 
+	var statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+		statusBarItem.text = "AutoGit";
+		statusBarItem.command = "alexmfv-ai-autogit.openOptionsMenu";
+		statusBarItem.show();
+
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with  registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('alexmfv-ai-autogit.helloWorld', function () {
-		// The code you place here will be executed every time your command is executed
-
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from AutoGit!');
+	let disposable = vscode.commands.registerCommand('alexmfv-ai-autogit.openOptionsMenu', function () {
+		
 	});
 
 	context.subscriptions.push(disposable);
