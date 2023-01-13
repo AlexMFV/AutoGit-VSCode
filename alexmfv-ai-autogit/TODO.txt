@@ -1,0 +1,17 @@
+- During the startup of the extension read the necessary settings (OpenAI token, etc.) and return a message to warn the user.
+- Working Git commit
+- Working Git push
+- Working Git modify commit message 
+    - When this option is selected, a list of the repository commits is displayed.
+    - The user selects the commit to modify.
+    - The user is prompted to enter the new commit message.
+    - Update the commit message and refresh the list
+- Gather the current uncommited commit diff and treat it by only keeping the lines that contain + or -
+    (the lines that have been added or removed)
+- Send the diff to the OpenAI API with the prompt ("Give me a message for the following git changes: <code_diff>")
+    while replacing the code_diff with the diff gathered in the previous step.
+- Add an option to generate a commit message from the OpenAI API and give the user the option to accept it (will add the message
+    directly to the commit message box)
+
+- (Maybe) Add an command to send to the AI the code differences and ask it to provide a changelog, after that create a Changelog
+    file (if it not exists) and add the formatted contents to it. (basically an AI autoupdated changelog)
