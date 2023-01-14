@@ -1,26 +1,20 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 const git = require('simple-git');
+const Prompts = require('./open-ai-prompts.js').Prompts;
+const Commands = require('./commands.js');
+const CommandCodes = Commands.AGCommands;
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-
-//Enumerator for commands
-const AGCommands = {
-	Commit: "AutoGit Commit",
-	ModifyCommit: "AutoGit Modify Commit Message",
-	CommitAndPush: "AutoGit Commit and Push"
-};
+const aiconfig = require("openai");
+const configuration = new aiconfig.Configuration({
+  apiKey: "",
+});
+const openai = new aiconfig.OpenAIApi(configuration);
 
 /**
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "alexmfv-ai-autogit" is now active!');
+	CheckTokenExists();
 
 	var statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
 	statusBarItem.text = "AutoGit";
@@ -29,11 +23,12 @@ function activate(context) {
 
 	let disposable = vscode.commands.registerCommand('alexmfv-ai-autogit.openOptionsMenu', function () {
 		//Show quick pick menu with options: AutoGit Commit, AutoGit Modify Commit Message, AutoGit Commit and Push
-		vscode.window.showQuickPick([AGCommands.Commit, AGCommands.CommitAndPush, AGCommands.ModifyCommit]).then(selection => {
+		vscode.window.showQuickPick(Object.values(CommandCodes)).then(selection => {
 			switch (selection) {
-				case AGCommands.Commit: AutoGitCommit(); break;
-				case AGCommands.CommitAndPush: AutoGitCommitAndPush(); break;
-				case AGCommands.ModifyCommit: AutoGitModifyCommitMessage(); break;
+				case CommandCodes.Commit: Commands.AutoGitCommit(); break;
+				case CommandCodes.CommitAndPush: Commands.AutoGitCommitAndPush(); break;
+				case CommandCodes.ModifyCommit: Commands.AutoGitModifyCommitMessage(); break;
+				case CommandCodes.Settings: Commands.Settings(); break;
 				default: break;
 			}
 		});
@@ -45,23 +40,27 @@ function activate(context) {
 // This method is called when your extension is deactivated
 function deactivate() {}
 
-//Commands Code
-function AutoGitCommit() {
-	vscode.window.showInformationMessage('Pressed AutoGit Commit Button!');
+//During runtime, checks if the user has a valid OpenAI API token defined in the settings of the extension
+async function CheckTokenExists() {
+	var getToken = vscode.workspace.getConfiguration('alexmfv-ai-autogit').get('token');
+
+	if (getToken == "" || getToken == null || getToken == undefined ||
+	getToken == "Your-OpenAI-Token-Here" || !getToken.startsWith("sk-"))
+	{
+		const selection = await vscode.window.showErrorMessage("Please enter your OpenAI API Token in the AutoGit settings! \n" +
+		"You can get your access token on the OpenAI website.", "Open OpenAI Website");
+
+		if(selection == "Open OpenAI Website") {
+			openLinkInBrowser("https://beta.openai.com/account/api-keys");
+		}
+	}
 }
 
-function AutoGitCommitAndPush() {
-	vscode.window.showInformationMessage('Pressed AutoGit Commit and Push Button!');
-}
-
-function AutoGitModifyCommitMessage() {
-	vscode.window.showInformationMessage('Pressed AutoGit Modify Commit Message Button!');
+function openLinkInBrowser(link) {
+	vscode.env.openExternal(vscode.Uri.parse(link));
 }
 
 module.exports = {
 	activate,
-	deactivate,
-	AutoGitCommit,
-	AutoGitCommitAndPush,
-	AutoGitModifyCommitMessage
+	deactivate
 }

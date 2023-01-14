@@ -12,6 +12,8 @@
     while replacing the code_diff with the diff gathered in the previous step.
 - Add an option to generate a commit message from the OpenAI API and give the user the option to accept it (will add the message
     directly to the commit message box)
+- When the icon in the status bar is pressed add a new option to allow the user to access the setting of the extension directly,
+    if it works show the settings page with the search bar focused on the extension name. (eg. "autogit")
 
 - (Maybe) Add an command to send to the AI the code differences and ask it to provide a changelog, after that create a Changelog
     file (if it not exists) and add the formatted contents to it. (basically an AI autoupdated changelog)
