@@ -1,20 +1,13 @@
 const vscode = require('vscode');
-const git = require('simple-git');
-const Prompts = require('./open-ai-prompts.js').Prompts;
 const Commands = require('./commands.js');
 const CommandCodes = Commands.AGCommands;
-
-const aiconfig = require("openai");
-const configuration = new aiconfig.Configuration({
-  apiKey: "",
-});
-const openai = new aiconfig.OpenAIApi(configuration);
+const helpers = require('./helpers.js');
 
 /**
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
-	CheckTokenExists();
+	helpers.CheckTokenExists();
 
 	var statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
 	statusBarItem.text = "AutoGit";
@@ -29,6 +22,7 @@ function activate(context) {
 				case CommandCodes.CommitAndPush: Commands.AutoGitCommitAndPush(); break;
 				case CommandCodes.ModifyCommit: Commands.AutoGitModifyCommitMessage(); break;
 				case CommandCodes.Settings: Commands.Settings(); break;
+				case CommandCodes.TestPrompt: Commands.TestOpenAIprompt(); break;
 				default: break;
 			}
 		});
@@ -39,26 +33,6 @@ function activate(context) {
 
 // This method is called when your extension is deactivated
 function deactivate() {}
-
-//During runtime, checks if the user has a valid OpenAI API token defined in the settings of the extension
-async function CheckTokenExists() {
-	var getToken = vscode.workspace.getConfiguration('alexmfv-ai-autogit').get('token');
-
-	if (getToken == "" || getToken == null || getToken == undefined ||
-	getToken == "Your-OpenAI-Token-Here" || !getToken.startsWith("sk-"))
-	{
-		const selection = await vscode.window.showErrorMessage("Please enter your OpenAI API Token in the AutoGit settings! \n" +
-		"You can get your access token on the OpenAI website.", "Open OpenAI Website");
-
-		if(selection == "Open OpenAI Website") {
-			openLinkInBrowser("https://beta.openai.com/account/api-keys");
-		}
-	}
-}
-
-function openLinkInBrowser(link) {
-	vscode.env.openExternal(vscode.Uri.parse(link));
-}
 
 module.exports = {
 	activate,

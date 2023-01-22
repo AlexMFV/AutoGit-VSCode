@@ -42,6 +42,11 @@
             "type": "string",
             "default": "Your-OpenAI-Token-Here",
             "description": "Your OpenAI token key, this is required for the extension to work, so make sure you have one."
+          },
+          "alexmfv-ai-autogit.orgtoken": {
+            "type": "string",
+            "default": "Your-OpenAI-Organisation-Token-Here",
+            "description": "Your OpenAI organization token key, this is sometimes required for the extension to work in case you do not have enough credits on a free account, so make sure you have one."
           }
         }
       }
