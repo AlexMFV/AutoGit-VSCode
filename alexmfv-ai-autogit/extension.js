@@ -22,7 +22,6 @@ function activate(context) {
 				case CommandCodes.CommitAndPush: Commands.AutoGitCommitAndPush(); break;
 				case CommandCodes.ModifyCommit: Commands.AutoGitModifyCommitMessage(); break;
 				case CommandCodes.Settings: Commands.Settings(); break;
-				case CommandCodes.TestPrompt: Commands.TestOpenAIprompt(); break;
 				default: break;
 			}
 		});
