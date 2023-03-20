@@ -18,7 +18,7 @@ function activate(context) {
 		//Show quick pick menu with options: AutoGit Commit, AutoGit Modify Commit Message, AutoGit Commit and Push
 		vscode.window.showQuickPick(Object.values(CommandCodes)).then(selection => {
 			switch (selection) {
-				case CommandCodes.Commit: Commands.AutoGitCommit(); break;
+				case CommandCodes.Commit: Commands.listNonCommittedChanges(); break;
 				case CommandCodes.CommitAndPush: Commands.AutoGitCommitAndPush(); break;
 				case CommandCodes.ModifyCommit: Commands.AutoGitModifyCommitMessage(); break;
 				case CommandCodes.Settings: Commands.Settings(); break;
